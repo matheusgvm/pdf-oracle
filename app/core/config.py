@@ -8,6 +8,8 @@ class Settings(BaseSettings):
     AWS_SECRET_ACCESS_KEY: str
     AWS_REGION: str
 
+    OCR_API_URL: str = "http://localhost:8000/ocr"
+
     model_config = SettingsConfigDict(env_file=Path(__file__).resolve().parents[2] / ".env")
 
 settings = Settings()

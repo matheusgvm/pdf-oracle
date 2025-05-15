@@ -3,6 +3,7 @@ from fastapi import UploadFile
 import uuid
 
 from app.services.upload_file_service import UploadFileService
+from app.services.pdf_text_extractor_service import PdfTextExtractorService
 
 class DocumentPipeline:
     async def process_upload(self, files: List[UploadFile]) -> dict:
@@ -13,12 +14,15 @@ class DocumentPipeline:
             file_id = str(uuid.uuid4())
 
             # Save file in s3
-            content = await file.read()
-            upload_file_service = UploadFileService()
-            upload_file_service.upload_file_to_s3(file_id, content)
+            file_content = await file.read()
 
-            # Executa OCR se necessário
-            # text = ocr_service.extract_text(file.content_type, content)
+            upload_file_service = UploadFileService()
+            document_path = upload_file_service.upload_file_to_s3(file_id, file_content)
+
+            # Extract text from PDF
+            pdf_text_extractor_service = PdfTextExtractorService()
+            text = pdf_text_extractor_service.text_extract(file.filename, file_content, file.content_type)
+            print(text)
 
             # Chunk + Embeddings
             # chunks = chunking_utils.split(text)

@@ -16,6 +16,8 @@ class UploadFileService:
             Body=content
         )
 
+        return s3_file_path
+
     def _s3_client_setup(self):
         s3_client = boto3.client("s3",
                             aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,

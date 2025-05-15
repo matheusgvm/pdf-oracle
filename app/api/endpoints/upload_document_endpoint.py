@@ -10,10 +10,12 @@ async def upload_documents(files: List[UploadFile] = File(...)):
         raise HTTPException(status_code=400, detail="No files uploaded")
 
     pipeline = DocumentPipeline()
-    try:
-        result = await pipeline.process_upload(files)
+    #try:
+    result = await pipeline.process_upload(files)
+    """
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Upload failed: {str(e)}")
+    """
 
     return {
         "message": "Documents processed successfully",
