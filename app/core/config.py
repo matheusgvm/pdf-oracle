@@ -1,3 +1,4 @@
+import os
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from pathlib import Path
 
@@ -8,8 +9,8 @@ class Settings(BaseSettings):
     AWS_SECRET_ACCESS_KEY: str
     AWS_REGION: str
 
-    OCR_API_URL: str = "http://localhost:8000/ocr"
-    RAG_API_URL: str = "http://localhost:8002/"
+    OCR_API_URL: str = os.getenv("OCR_URL", "http://localhost:8000/")
+    RAG_API_URL: str = os.getenv("RAG_URL", "http://localhost:8002/")
 
     GEMINI_API_KEY: str
     GEMINI_MODEL_ID: str = "gemini-2.0-flash"

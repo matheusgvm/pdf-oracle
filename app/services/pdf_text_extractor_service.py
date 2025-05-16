@@ -58,7 +58,7 @@ class PdfTextExtractorService:
         """
         try:
             files = {'file': (file_name, file_content, file_content_type)}
-            response = requests.post(settings.OCR_API_URL, files=files)
+            response = requests.post(f"{settings.OCR_API_URL}/ocr", files=files)
             response.raise_for_status()
 
             data = response.json()

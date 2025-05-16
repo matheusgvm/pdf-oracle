@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  ocr:
+    build:
+      context: ./ocr-tesseract-api
+    container_name: ocr_service
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+
+  rag:
+    build:
+      context: ./rag-api
+    container_name: rag_service
+    ports:
+      - "8002:8002"
+    env_file:
+      - .env
+
+  principal:
+    build:
+      context: .
+      dockerfile: app/Dockerfile
+    container_name: pdf_oracle
+    ports:
+      - "8001:8001"
+    env_file:
+      - .env
+    environment:
+      OCR_URL: "http://ocr_service:8000"
+      RAG_URL: "http://rag_service:8002"
+    depends_on:
+      - ocr
+      - rag

@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+pydantic
+requests
+boto3
+botocore
+pymupdf
+google-generativeai
+pydantic-settings
+python-multipart
