@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+langchain
+transformers
+sentence-transformers
+faiss-cpu
+pydantic
+torch --index-url https://download.pytorch.org/whl/cpu
+langchain-community
