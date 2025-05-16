@@ -9,6 +9,13 @@ class Settings(BaseSettings):
     AWS_REGION: str
 
     OCR_API_URL: str = "http://localhost:8000/ocr"
+    RAG_API_URL: str = "http://localhost:8002/"
+
+    GEMINI_API_KEY: str
+    GEMINI_MODEL_ID: str = "gemini/gemini-2.0-flash"
+
+    CHUNK_SIZE: int = 300
+    CHUNK_OVERLAP: int = 30
 
     model_config = SettingsConfigDict(env_file=Path(__file__).resolve().parents[2] / ".env")
 

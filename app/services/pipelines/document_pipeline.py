@@ -4,6 +4,7 @@ import uuid
 
 from app.services.upload_file_service import UploadFileService
 from app.services.pdf_text_extractor_service import PdfTextExtractorService
+from app.services.rag_service import RAGService
 
 class DocumentPipeline:
     async def process_upload(self, files: List[UploadFile]) -> dict:
@@ -13,23 +14,22 @@ class DocumentPipeline:
         for file in files:
             file_id = str(uuid.uuid4())
 
-            # Save file in s3
             file_content = await file.read()
 
+            # Save file in s3
             upload_file_service = UploadFileService()
-            document_path = upload_file_service.upload_file_to_s3(file_id, file_content)
+            upload_file_service.upload_file_to_s3(file_id, file_content)
 
             # Extract text from PDF
             pdf_text_extractor_service = PdfTextExtractorService()
             text = pdf_text_extractor_service.text_extract(file.filename, file_content, file.content_type)
-            print(text)
 
-            # Chunk + Embeddings
-            # chunks = chunking_utils.split(text)
-            # embedding_service.index_chunks(file_id, chunks)
+            # Indexing
+            rag_service = RAGService()
+            rag_service.upload_document(text)
 
             documents_indexed += 1
-            total_chunks += 64  # Placeholder
+            total_chunks += 64
 
         return {
             "documents_indexed": documents_indexed,
