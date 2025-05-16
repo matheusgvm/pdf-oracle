@@ -25,6 +25,7 @@ class PdfTextExtractorService:
             response = requests.post(settings.OCR_API_URL, files=file)
 
             pages = response.json()
+            pages = pages['pages']
             unified_text = '\n\n'.join(page['text'] for page in pages)
 
             return unified_text if unified_text else None

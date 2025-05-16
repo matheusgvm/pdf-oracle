@@ -12,10 +12,10 @@ class Settings(BaseSettings):
     RAG_API_URL: str = "http://localhost:8002/"
 
     GEMINI_API_KEY: str
-    GEMINI_MODEL_ID: str = "gemini/gemini-2.0-flash"
+    GEMINI_MODEL_ID: str = "gemini-2.0-flash"
 
-    CHUNK_SIZE: int = 300
-    CHUNK_OVERLAP: int = 30
+    CHUNK_SIZE: int = 500
+    CHUNK_OVERLAP: int = 50
 
     model_config = SettingsConfigDict(env_file=Path(__file__).resolve().parents[2] / ".env")
 

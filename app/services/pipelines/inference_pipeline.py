@@ -11,9 +11,13 @@ class InferencePipeline:
         if not chunks:
             return "No relevant information found in the indexed documents."
 
+        chunks = chunks["retrieved_chunks"]
+        retrieved_chunks_number = [chunk["chunk_number"] for chunk in chunks]
+        retrieved_chunks_text = [chunk["content"].replace("\n", " ") for chunk in chunks]
+
         # Generating answer
         llm_service = LLMService()
-        answer = llm_service.generate_answer(question, chunks)
+        answer = llm_service.generate_answer(question, retrieved_chunks_text)
         is_answer_valid = llm_service.answer_validator(question, answer)
 
         if is_answer_valid:

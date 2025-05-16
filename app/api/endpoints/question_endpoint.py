@@ -18,8 +18,10 @@ async def answer_question(request: QuestionRequest):
     if not question:
         raise HTTPException(status_code=400, detail="Question cannot be empty")
 
-    try:
-        answer = InferencePipeline().generate_question_answer(question)
-        return AnswerResponse(answer=answer)
+    #try:
+    answer = InferencePipeline().generate_question_answer(question)
+    return AnswerResponse(answer=answer)
+    """
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error generating answer: {str(e)}")
+    """

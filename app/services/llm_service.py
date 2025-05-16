@@ -1,3 +1,5 @@
+import json
+
 import google.generativeai as genai
 from app.core.config import settings
 
@@ -9,7 +11,7 @@ class LLMService:
     def generate_answer(self, query: str, chunks) -> str:
         context = "\n\n".join(chunks)
         prompt = f"""
-        Use the excerpts from the document below to answer the user's question.
+        Use the excerpts from the document below to answer the user's question. Always provide the answer in the same language as the question.
 
         Document excerpts:
         ------------------
@@ -27,7 +29,8 @@ class LLMService:
 
     def answer_validator(self, question: str, answer: str) -> bool:
         prompt = f"""
-        Assess whether the provided answer correctly and sufficiently responds to the question. 
+        Assess whether the provided answer correctly and sufficiently responds to the question.
+        Check if the answer is in the same language as the question. 
         Only consider the question and the answer — do not assume any external context.
 
         Return your output as a valid JSON object in the following format:
@@ -43,4 +46,6 @@ class LLMService:
         """
 
         response = self.llm.generate_content(prompt)
-        return response.text
+        response = response.text.strip('```json').strip()
+        response = json.loads(response).get("is_valid")
+        return response

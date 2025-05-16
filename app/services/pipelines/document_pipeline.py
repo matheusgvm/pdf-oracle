@@ -5,6 +5,7 @@ import uuid
 from app.services.upload_file_service import UploadFileService
 from app.services.pdf_text_extractor_service import PdfTextExtractorService
 from app.services.rag_service import RAGService
+from app.utils.text_preprocessor import preprocess_text
 
 class DocumentPipeline:
     async def process_upload(self, files: List[UploadFile]) -> dict:
@@ -24,12 +25,15 @@ class DocumentPipeline:
             pdf_text_extractor_service = PdfTextExtractorService()
             text = pdf_text_extractor_service.text_extract(file.filename, file_content, file.content_type)
 
+            # Preprocess text
+            text = preprocess_text(text)
+
             # Indexing
             rag_service = RAGService()
-            rag_service.upload_document(text)
+            response = rag_service.upload_document(text)
 
             documents_indexed += 1
-            total_chunks += 64
+            total_chunks += response["total_chunks"]
 
         return {
             "documents_indexed": documents_indexed,
